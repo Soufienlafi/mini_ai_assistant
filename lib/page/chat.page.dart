@@ -7,7 +7,7 @@ import 'package:mini_ai_assistant/menu/drawer.widget.dart';
 
 class ChatPage extends StatefulWidget {
   final String? conversationId;
-  ChatPage({this.conversationId});
+  const ChatPage({super.key, this.conversationId});
 
   @override
   ChatPageState createState() => ChatPageState();

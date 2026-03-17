@@ -6,6 +6,8 @@ void main() {
 }
 
 class MyApp extends StatelessWidget {
+  MyApp({super.key});
+
   final routes = {
     '/chat': (context) => ChatPage(),
   };

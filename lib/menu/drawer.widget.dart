@@ -3,6 +3,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import 'package:mini_ai_assistant/page/chat.page.dart';
 
 class MyDrawer extends StatefulWidget {
+  const MyDrawer({super.key});
+
   @override
   MyDrawerState createState() => MyDrawerState();
 }
@@ -84,7 +86,7 @@ class MyDrawerState extends State<MyDrawer> {
                 Divider(height: 4, color: Colors.blue),
               ],
             );
-          }).toList(),
+          }),
         ],
       ),
     );
