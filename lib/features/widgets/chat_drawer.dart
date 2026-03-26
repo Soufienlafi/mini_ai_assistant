@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:mini_project_genuisdk/model.dart';
+import 'package:mini_project_genuisdk/features/models/model.dart';
  
 class ChatDrawer extends StatelessWidget {
   final List<List<MessageModel>> allChats;

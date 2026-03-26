@@ -1,10 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:google_generative_ai/google_generative_ai.dart';
-import 'package:mini_project_genuisdk/model.dart';
-import 'package:mini_project_genuisdk/store/chat.store.dart';
-import 'package:mini_project_genuisdk/widgets/chat_drawer.dart';
-import 'package:mini_project_genuisdk/widgets/message_bubble.widget.dart';
-import 'package:mini_project_genuisdk/widgets/message_input.widget.dart';
+import 'package:mini_project_genuisdk/features/widgets/message_bubble.widget.dart';
+import '../models/model.dart';
+import '../../services/chat.service.dart';
+import '../widgets/chat_drawer.dart';
+ import '../widgets/message_input.widget.dart';
 
 class GeminiChatBot extends StatefulWidget {
   const GeminiChatBot({super.key});
@@ -14,11 +14,12 @@ class GeminiChatBot extends StatefulWidget {
 }
 
 class _GeminiChatBotState extends State<GeminiChatBot> {
-  static const apiKey = 'AIzaSyAwKTfVcTaUhXjcSNEWKBzg34fYFie3t8M';
+  static const apiKey = 'AIzaSyA4QMyuOwODIokz4SiTKYQ640IQkjLi5Ug';
   final model = GenerativeModel(model: 'gemini-2.5-flash', apiKey: apiKey);
   List<List<MessageModel>> allChats = [[]];
   TextEditingController messageController = TextEditingController();
   int currentChatIndex = 0;
+
   List<MessageModel> get chat => allChats[currentChatIndex];
 
   @override
@@ -48,27 +49,38 @@ class _GeminiChatBotState extends State<GeminiChatBot> {
   }
 
   Future<void> sendMessage() async {
-    final message = messageController.text;
+    final messageText = messageController.text;
+    if (messageText.trim().isEmpty) return;
 
     setState(() {
+      chat.add(MessageModel(
+        isUser: true,
+        message: messageText,
+        time: DateTime.now(),
+      ));
+
+      chat.add(MessageModel(
+        isUser: false,
+        message: '',
+        time: DateTime.now(),
+        isLoading: true,
+      ));
+
       messageController.clear();
-      chat.add(
-        MessageModel(isUser: true, message: message, time: DateTime.now()),
-      );
     });
 
-    final content = [Content.text(message)];
-
+    final content = [Content.text(messageText)];
     final response = await model.generateContent(content);
 
     setState(() {
-      chat.add(
-        MessageModel(
+      final loadingIndex = chat.indexWhere((m) => m.isLoading);
+      if (loadingIndex != -1) {
+        chat[loadingIndex] = MessageModel(
           isUser: false,
           message: response.text ?? '',
           time: DateTime.now(),
-        ),
-      );
+        );
+      }
     });
 
     await ChatStore.saveChats(allChats);
@@ -77,7 +89,7 @@ class _GeminiChatBotState extends State<GeminiChatBot> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Color.fromARGB(255, 237, 237, 237),
+      backgroundColor: const Color.fromARGB(255, 237, 237, 237),
       drawer: ChatDrawer(
         allChats: allChats,
         currentChatIndex: currentChatIndex,
@@ -90,18 +102,13 @@ class _GeminiChatBotState extends State<GeminiChatBot> {
             allChats.add([]);
             currentChatIndex = allChats.length - 1;
           });
-
           await ChatStore.saveChats(allChats);
-
-          WidgetsBinding.instance.addPostFrameCallback((_) {
-            Navigator.pop(context);
-          });
+          WidgetsBinding.instance.addPostFrameCallback((_) => Navigator.pop(context));
         },
         onDeleteChat: (index) async {
           setState(() {
             allChats.removeAt(index);
-            if (currentChatIndex >= allChats.length)
-              currentChatIndex = allChats.length - 1;
+            if (currentChatIndex >= allChats.length) currentChatIndex = allChats.length - 1;
           });
           await ChatStore.saveChats(allChats);
         },
@@ -117,8 +124,7 @@ class _GeminiChatBotState extends State<GeminiChatBot> {
           Expanded(
             child: ListView.builder(
               itemCount: chat.length,
-              itemBuilder: (context, index) =>
-                  MessageBubble(message: chat[index]),
+              itemBuilder: (context, index) => MessageBubble(message: chat[index]),
             ),
           ),
           MessageInput(controller: messageController, onSend: sendMessage),
@@ -134,7 +140,7 @@ class _GeminiChatBotState extends State<GeminiChatBot> {
             });
             await ChatStore.saveChats(allChats);
           },
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
         ),
       ),
     );

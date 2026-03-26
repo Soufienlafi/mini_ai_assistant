@@ -1,6 +1,6 @@
 import 'dart:convert';
 import 'package:shared_preferences/shared_preferences.dart';
-import '../model.dart';
+import '../features/models/model.dart';
 
 class ChatStore {
   static const String key = 'all_chats';

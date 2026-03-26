@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:mini_project_genuisdk/pages/chat.page.dart';
-import 'package:mini_project_genuisdk/pages/splash.page.dart';
+import 'package:mini_project_genuisdk/features/pages/chat.page.dart';
+import 'package:mini_project_genuisdk/features/pages/splash.page.dart';
 
 void main() {
   runApp(const MainApp());
@@ -11,6 +11,7 @@ class MainApp extends StatelessWidget {
 
   @override
  @override
+
 Widget build(BuildContext context) {
   return const MaterialApp(
     debugShowCheckedModeBanner: false,
