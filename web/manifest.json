@@ -1,6 +1,6 @@
 {
-    "name": "mini_ai_assistant",
-    "short_name": "mini_ai_assistant",
+    "name": "mini_project_genuisdk",
+    "short_name": "mini_project_genuisdk",
     "start_url": ".",
     "display": "standalone",
     "background_color": "#0175C2",
