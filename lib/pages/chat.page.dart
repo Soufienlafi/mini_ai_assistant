@@ -116,8 +116,15 @@ class _GeminiChatBotState extends State<GeminiChatBot> {
         onDeleteChat: (index) async {
           setState(() {
             allChats.removeAt(index);
-            if (currentChatIndex >= allChats.length) {
-              currentChatIndex = allChats.length - 1;
+            if (allChats.isEmpty) {
+              allChats = [[]];
+              currentChatIndex = 0;
+            } else {
+              if (index < currentChatIndex) {
+                currentChatIndex--;
+              } else if (currentChatIndex >= allChats.length) {
+                currentChatIndex = allChats.length - 1;
+              }
             }
           });
           await ChatStore.saveChats(allChats);

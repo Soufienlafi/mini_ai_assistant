@@ -3,7 +3,7 @@ import 'package:flutter_dotenv/flutter_dotenv.dart';
 import 'package:mini_project_genuisdk/pages/splash.page.dart';
 
 void main() async {
-  await dotenv.load();
+  await dotenv.load(fileName: "assets/.env");
 
   runApp(const MainApp());
 }
