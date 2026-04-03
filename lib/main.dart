@@ -1,23 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:mini_ai_assistant/page/chat.page.dart';
+import 'package:flutter_dotenv/flutter_dotenv.dart';
+import 'package:mini_project_genuisdk/pages/splash.page.dart';
 
-void main() {
-  runApp(MyApp());
+void main() async {
+  await dotenv.load(fileName: "assets/.env");
+
+  runApp(const MainApp());
 }
 
-class MyApp extends StatelessWidget {
-  MyApp({super.key});
-
-  final routes = {
-    '/chat': (context) => ChatPage(),
-  };
+class MainApp extends StatelessWidget {
+  const MainApp({super.key});
 
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return const MaterialApp(
       debugShowCheckedModeBanner: false,
-      routes: routes,
-      home: ChatPage(),
+      title: 'ChatBot',
+      home: SplashScreen(),
     );
   }
 }
